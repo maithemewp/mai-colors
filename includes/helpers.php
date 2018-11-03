@@ -69,6 +69,11 @@ function _maicolors_nav_choices( $setting, $class ) {
 			'button_hover_color' => esc_attr__( 'Highlight Button Hover Color', 'mai-colors' ),
 		) );
 	}
+	if ( 'header_nav_color' !== $setting ) {
+		unset( $choices['menu_bg'] );
+		unset( $choices['item_hover_bg'] );
+		unset( $choices['item_current_bg'] );
+	}
 	return $choices;
 }
 
@@ -94,6 +99,11 @@ function _maicolors_nav_defaults( $setting, $class ) {
 			'button_hover_bg'    => '',
 			'button_hover_color' => '',
 		) );
+	}
+	if ( 'header_nav_color' !== $setting ) {
+		unset( $defaults['menu_bg'] );
+		unset( $defaults['item_hover_bg'] );
+		unset( $defaults['item_current_bg'] );
 	}
 	return $defaults;
 }
@@ -210,6 +220,15 @@ function _maicolors_nav_output( $setting, $class ) {
 			),
 		) );
 	}
+	// if ( 'header_nav_color' === $setting ) {
+	// 	$output = wp_list_filter( $output, array(
+	// 		'choice' => 'menu_bg',
+	// 		'choice' => 'item_hover_bg',
+	// 		'choice' => 'item_current_bg',
+	// 		'choice' => 'button_bg',
+	// 		'choice' => 'button_hover_bg',
+	// 	), 'NOT' );
+	// }
 	return $output;
 }
 

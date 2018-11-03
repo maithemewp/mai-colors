@@ -8,7 +8,9 @@ Kirki::add_section( 'maicolors_header_footer', array(
 	'panel' => $panel_id,
 ) );
 
-// Header Background.
+/**
+ * Header Before.
+ */
 Kirki::add_field( $config_id, array(
 	'type'      => 'multicolor',
 	'settings'  => 'header_before',
@@ -56,7 +58,9 @@ Kirki::add_field( $config_id, array(
 	}
 ) );
 
-// Header Background.
+/**
+ * Header.
+ */
 Kirki::add_field( $config_id, array(
 	'type'      => 'multicolor',
 	'settings'  => 'site_header',
@@ -80,7 +84,37 @@ Kirki::add_field( $config_id, array(
 	),
 ) );
 
-// Footer Widgets.
+/**
+ * Site Title.
+ */
+Kirki::add_field( $config_id, array(
+	'type'      => 'multicolor',
+	'settings'  => 'site_title',
+	'label'     => __( 'Site Title', 'mai-colors' ),
+	'section'   => 'maicolors_header_footer',
+	'transport' => 'auto',
+	'default'   => '',
+	'choices'   => array(
+		'color' => esc_attr__( 'Color', 'mai-colors' ),
+	),
+	'default' => array(
+		'color' => '',
+	),
+	'output' => array(
+		array(
+			'choice'   => 'color',
+			'property' => 'color',
+			'element'  => '.site-title a:not(.custom-logo-link)',
+		),
+	),
+	'active_callback' => function() {
+		return ! has_custom_logo();
+	}
+) );
+
+/**
+ * Footer Widgets.
+ */
 Kirki::add_field( $config_id, array(
 	'type'      => 'multicolor',
 	'settings'  => 'footer_widgets',
@@ -128,7 +162,9 @@ Kirki::add_field( $config_id, array(
 	}
 ) );
 
-// Site Footer.
+/**
+ * Site Footer.
+ */
 Kirki::add_field( $config_id, array(
 	'type'      => 'multicolor',
 	'settings'  => 'site_footer',

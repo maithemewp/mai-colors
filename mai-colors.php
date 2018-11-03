@@ -52,4 +52,7 @@ function maicolors_register_customizer_settings() {
 	// Header & Footer.
 	include_once 'configs/header-footer.php';
 
+	// Content.
+	include_once 'configs/content.php';
+
 }

@@ -12,19 +12,23 @@ Kirki::add_section( 'maicolors_defaults', array(
  * Body Background
  */
 Kirki::add_field( $config_id, array(
-	'type'      => 'color',
+	'type'      => 'background',
 	'settings'  => 'body_bg',
 	'label'     => __( 'Body Background', 'mai-colors' ),
 	'section'   => 'maicolors_defaults',
 	'transport' => 'auto',
-	'default'   => '',
-	'choices'   => array(
-		'alpha' => true,
+	'default'   => array(
+		'background-color'      => '',
+		'background-image'      => '',
+		'background-repeat'     => '',
+		'background-position'   => '',
+		'background-size'       => '',
+		'background-attachment' => '',
 	),
 	'output' => array(
 		array(
-			'element'  => 'body',
-			'property' => 'background-color',
+			'element' => array( 'body', 'body.has-boxed-site-container' ),
+			// 'property' => 'background-color',
 		),
 	),
 ) );
