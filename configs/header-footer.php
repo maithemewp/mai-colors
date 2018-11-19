@@ -124,6 +124,7 @@ Kirki::add_field( $config_id, array(
 	'default'   => '',
 	'choices'   => array(
 		'bg'               => esc_attr__( 'Background', 'mai-colors' ),
+		'title_color'      => esc_attr__( 'Title Color', 'mai-colors' ),
 		'color'            => esc_attr__( 'Text Color', 'mai-colors' ),
 		'link_color'       => esc_attr__( 'Link Color', 'mai-colors' ),
 		'link_hover_color' => esc_attr__( 'Link Hover Color', 'mai-colors' ),
@@ -140,6 +141,11 @@ Kirki::add_field( $config_id, array(
 			'choice'   => 'bg',
 			'property' => 'background-color',
 			'element'  => '.footer-widgets',
+		),
+		array(
+			'choice'   => 'title_color',
+			'property' => 'color',
+			'element'  => array( '.footer-widgets .widgettitle', '.footer-widgets .widget-title' ),
 		),
 		array(
 			'choice'   => 'color',
