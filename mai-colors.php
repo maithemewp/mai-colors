@@ -13,46 +13,214 @@
  * Author URI:      https://maitheme.com
  */
 
-include_once plugin_dir_path( __FILE__ ) . 'includes/vendor/class-kirki-installer-section.php';
-foreach ( glob( plugin_dir_path( __FILE__ ) . 'includes/*.php' ) as $file ) { include_once $file; }
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) exit;
 
-
-add_action( 'init', 'maicolors_register_customizer_settings' );
-function maicolors_register_customizer_settings() {
-
-	if ( ! class_exists( 'Kirki' ) ) {
-		return;
-	}
-
-	$config_id      = 'mai_colors';
-	$panel_id       = 'mai_colors';
-	$settings_field = 'mai_colors';
-
-	Kirki::add_config( $config_id, array(
-		'capability'  => 'edit_theme_options',
-		'option_type' => 'option',
-		'option_name' => $settings_field,
-	) );
+/**
+ * Main Mai_Colors Class.
+ *
+ * @since 1.0.0
+ */
+final class Mai_Colors {
 
 	/**
-	 * Mai Colors
+	 * @var Mai_Colors The one true Mai_Colors
+	 * @since 1.0.0
 	 */
-	Kirki::add_panel( $panel_id, array(
-		'title'       => esc_attr__( 'Mai Colors', 'mai-colors' ),
-		'description' => esc_attr__( 'My panel description', 'mai-colors' ),
-		'priority'    => 55,
-	) );
+	private static $instance;
 
-	// Defaults.
-	include_once 'configs/defaults.php';
+	/**
+	 * Main Mai_Colors Instance.
+	 *
+	 * Insures that only one instance of Mai_Colors exists in memory at any one
+	 * time. Also prevents needing to define globals all over the place.
+	 *
+	 * @since   1.0.0
+	 * @static  var array $instance
+	 * @uses    Mai_Colors::setup_constants() Setup the constants needed.
+	 * @uses    Mai_Colors::includes() Include the required files.
+	 * @uses    Mai_Colors::setup() Activate, deactivate, etc.
+	 * @see     Mai_Colors()
+	 * @return  object | Mai_Colors The one true Mai_Colors
+	 */
+	public static function instance() {
+		if ( ! isset( self::$instance ) ) {
+			// Setup the setup
+			self::$instance = new Mai_Colors;
+			// Methods
+			self::$instance->setup_constants();
+			self::$instance->includes();
+			self::$instance->setup();
+		}
+		return self::$instance;
+	}
 
-	// Navigation.
-	include_once 'configs/navigation.php';
+	/**
+	 * Throw error on object clone.
+	 *
+	 * The whole idea of the singleton design pattern is that there is a single
+	 * object therefore, we don't want the object to be cloned.
+	 *
+	 * @since   1.0.0
+	 * @access  protected
+	 * @return  void
+	 */
+	public function __clone() {
+		// Cloning instances of the class is forbidden.
+		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'mai-colors' ), '1.0' );
+	}
 
-	// Header & Footer.
-	include_once 'configs/header-footer.php';
+	/**
+	 * Disable unserializing of the class.
+	 *
+	 * @since   1.0.0
+	 * @access  protected
+	 * @return  void
+	 */
+	public function __wakeup() {
+		// Unserializing instances of the class is forbidden.
+		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'mai-colors' ), '1.0' );
+	}
 
-	// Content.
-	include_once 'configs/content.php';
+	/**
+	 * Setup plugin constants.
+	 *
+	 * @access  private
+	 * @since   1.0.0
+	 * @return  void
+	 */
+	private function setup_constants() {
+
+		// Plugin version.
+		if ( ! defined( 'MAI_COLORS_VERSION' ) ) {
+			define( 'MAI_COLORS_VERSION', '0.1.0' );
+		}
+
+		// Plugin Folder Path.
+		if ( ! defined( 'MAI_COLORS_PLUGIN_DIR' ) ) {
+			define( 'MAI_COLORS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+		}
+
+		// Plugin Includes Path.
+		if ( ! defined( 'MAI_COLORS_INCLUDES_DIR' ) ) {
+			define( 'MAI_COLORS_INCLUDES_DIR', MAI_COLORS_PLUGIN_DIR . 'includes/' );
+		}
+
+		// Plugin Folder URL.
+		if ( ! defined( 'MAI_COLORS_PLUGIN_URL' ) ) {
+			define( 'MAI_COLORS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+		}
+
+		// Plugin Root File.
+		if ( ! defined( 'MAI_COLORS_PLUGIN_FILE' ) ) {
+			define( 'MAI_COLORS_PLUGIN_FILE', __FILE__ );
+		}
+
+		// Plugin Base Name
+		if ( ! defined( 'MAI_COLORS_BASENAME' ) ) {
+			define( 'MAI_COLORS_BASENAME', dirname( plugin_basename( __FILE__ ) ) );
+		}
+
+	}
+
+	/**
+	 * Include required files.
+	 *
+	 * @access  private
+	 * @since   1.0.0
+	 * @return  void
+	 */
+	private function includes() {
+		include_once MAI_COLORS_INCLUDES_DIR . 'vendor/class-kirki-installer-section.php';
+		foreach ( glob( MAI_COLORS_INCLUDES_DIR . '*.php' ) as $file ) { include $file; }
+	}
+
+	public function setup() {
+		add_action( 'plugins_loaded', array( $this, 'updater' ) );
+		add_action( 'init',           array( $this, 'settings' ) );
+	}
+
+	/**
+	 * Setup the updater.
+	 *
+	 * @uses    https://github.com/YahnisElsts/plugin-update-checker/
+	 *
+	 * @return  void
+	 */
+	public function updater() {
+		if ( ! is_admin() ) {
+			return;
+		}
+		if ( ! class_exists( 'Puc_v4_Factory' ) ) {
+			require_once MAI_COLORS_INCLUDES_DIR . 'vendor/plugin-update-checker/plugin-update-checker.php'; // 4.4
+		}
+		$updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/maithemewp/mai-colors/', __FILE__, 'mai-colors' );
+	}
+
+	/**
+	 * Register the customizer settings..
+	 *
+	 * @return  void
+	 */
+	function settings() {
+
+		if ( ! class_exists( 'Kirki' ) ) {
+			return;
+		}
+
+		$config_id      = 'mai_colors';
+		$panel_id       = 'mai_colors';
+		$settings_field = 'mai_colors';
+
+		Kirki::add_config( $config_id, array(
+			'capability'  => 'edit_theme_options',
+			'option_type' => 'option',
+			'option_name' => $settings_field,
+		) );
+
+		/**
+		 * Mai Colors
+		 */
+		Kirki::add_panel( $panel_id, array(
+			'title'       => esc_attr__( 'Mai Colors', 'mai-colors' ),
+			// 'description' => esc_attr__( '', 'mai-colors' ),
+			'priority'    => 55,
+		) );
+
+		// Defaults.
+		include_once 'configs/defaults.php';
+
+		// Navigation.
+		include_once 'configs/navigation.php';
+
+		// Header & Footer.
+		include_once 'configs/header-footer.php';
+
+		// Content.
+		include_once 'configs/content.php';
+
+	}
 
 }
+
+/**
+ * The main function for that returns Mai_Colors
+ *
+ * The main function responsible for returning the one true Mai_Colors
+ * Instance to functions everywhere.
+ *
+ * Use this function like you would a global variable, except without needing
+ * to declare the global.
+ *
+ * Example: <?php $plugin = Mai_Colors(); ?>
+ *
+ * @since 1.0.0
+ *
+ * @return object|Mai_Colors The one true Mai_Colors Instance.
+ */
+function Mai_Colors() {
+	return Mai_Colors::instance();
+}
+
+// Get Mai_Colors Running.
+Mai_Colors();
