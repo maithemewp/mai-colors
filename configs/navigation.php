@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Setup the menus customizer settings.
+ *
+ * @since   0.1.0
+ */
 class Mai_Colors_Navigation {
 
 	function __construct( $panel_id, $config_id ) {
@@ -43,6 +48,11 @@ class Mai_Colors_Navigation {
 		Kirki::add_field( $config_id, $this->get_highlight_config( __( 'Primary Nav Highlight', 'mai-colors' ), 'primary_nav_highlight_color', '.nav-primary', $this->has_highlight( 'primary' ) ) );
 
 		/**
+		 * Primary Nav Search.
+		 */
+		Kirki::add_field( $config_id, $this->get_search_config( __( 'Primary Nav Search', 'mai-colors' ), 'primary_nav_search_color', '.nav-primary', $this->has_search( 'primary' ) ) );
+
+		/**
 		 * Secondary Nav.
 		 */
 		Kirki::add_field( $config_id, $this->get_config( __( 'Footer Nav', 'mai-colors' ), 'secondary_nav_color', '.nav-secondary', $this->has_menu( 'secondary' ) ) );
@@ -57,9 +67,20 @@ class Mai_Colors_Navigation {
 		 */
 		Kirki::add_field( $config_id, $this->get_highlight_config( __( 'Footer Nav Highlight', 'mai-colors' ), 'secondary_nav_highlight_color', '.nav-secondary', $this->has_highlight( 'secondary' ) ) );
 
+		/**
+		 * Secondary Nav Search.
+		 */
+		Kirki::add_field( $config_id, $this->get_search_config( __( 'Footer Nav Search', 'mai-colors' ), 'secondary_nav_search_color', '.nav-secondary', $this->has_search( 'secondary' ) ) );
 
 	}
 
+	/**
+	 * Get the config for a menu.
+	 *
+	 * @since   0.1.0
+	 *
+	 * @return  array  The kirki config.
+	 */
 	function get_config( $label, $key, $class, $callback ) {
 
 		$config = array(
@@ -91,6 +112,8 @@ class Mai_Colors_Navigation {
 					'element'  => array(
 						"{$class}",
 						"{$class} .sub-menu a",
+						"{$class} .nav-search:hover",
+						"{$class} .nav-search:focus",
 						".home {$class} .current-menu-item > a",
 					),
 				),
@@ -110,11 +133,11 @@ class Mai_Colors_Navigation {
 					'element'  => array(
 						"{$class} a:hover",
 						"{$class} a:focus",
-						"{$class} .nav-search:hover",
-						"{$class} .nav-search:focus",
+						// "{$class} .nav-search:hover",
+						// "{$class} .nav-search:focus",
 						"{$class} .sub-menu a:hover",
 						"{$class} .sub-menu a:focus",
-						"{$class} .menu-item-has-children:not(.current-menu-ancestor):hover > a",
+						"{$class} > .menu-item-has-children:not(.current-menu-ancestor):hover > a",
 					),
 				),
 				array(
@@ -127,7 +150,7 @@ class Mai_Colors_Navigation {
 						"{$class} .nav-search:focus",
 						"{$class} .sub-menu a:hover",
 						"{$class} .sub-menu a:focus",
-						"{$class} .menu-item-has-children:not(.current-menu-ancestor):hover > a",
+						"{$class} > .menu-item-has-children:not(.current-menu-ancestor):hover > a",
 					),
 				),
 				array(
@@ -160,21 +183,30 @@ class Mai_Colors_Navigation {
 
 		// If header nav.
 		if ( 'header_nav_color' === $key ) {
-			// Remove menu_bg settings.
 			unset( $config['choices']['menu_bg'] );
+			unset( $config['choices']['item_hover_bg'] );
+			unset( $config['choices']['item_current_bg'] );
 			unset( $config['default']['menu_bg'] );
-			// Remove .sub-menu CSS selectors.
-			unset( $config['output'][0] );
-			unset( $config['output'][1]['element'][2] );
-			unset( $config['output'][2]['element'][4] );
-			unset( $config['output'][2]['element'][5] );
-			unset( $config['output'][3]['element'][4] );
-			unset( $config['output'][3]['element'][5] );
+			unset( $config['default']['item_hover_bg'] );
+			unset( $config['default']['item_current_bg'] );
+			unset( $config['output'][0] );               // menu_bg
+			unset( $config['output'][1]['element'][2] ); // .nav-search from item_color
+			unset( $config['output'][2] );               // item_hover_bg
+			unset( $config['output'][3]['element'][4] ); // .nav-search:hover from item_hover_color
+			unset( $config['output'][3]['element'][5] ); // .nav-search:focuse from item_hover_color
+			unset( $config['output'][4] );               // item_current_bg
 		}
 
 		return $config;
 	}
 
+	/**
+	 * Get the config for a submenu.
+	 *
+	 * @since   0.1.0
+	 *
+	 * @return  array  The kirki config.
+	 */
 	function get_submenu_config( $label, $key, $class, $callback ) {
 
 		return array(
@@ -259,6 +291,13 @@ class Mai_Colors_Navigation {
 		);
 	}
 
+	/**
+	 * Get the config for a menu's highlight button.
+	 *
+	 * @since   0.1.0
+	 *
+	 * @return  array  The kirki config.
+	 */
 	function get_highlight_config( $label, $key, $class, $callback ) {
 
 		return array(
@@ -315,10 +354,59 @@ class Mai_Colors_Navigation {
 		);
 	}
 
+	/**
+	 * Get the config for a menu's search icon.
+	 *
+	 * @since   0.1.0
+	 *
+	 * @return  array  The kirki config.
+	 */
+	function get_search_config( $label, $key, $class, $callback ) {
+
+		return array(
+			'type'      => 'multicolor',
+			'settings'  => $key,
+			'label'     => $label,
+			'section'   => 'maicolors_menus',
+			'transport' => 'auto',
+			'choices'   => array(
+				'search_hover_color' => esc_attr__( 'Search Hover Color', 'mai-colors' ),
+			),
+			'default' => array(
+				'search_hover_color' => '',
+			),
+			'output' => array(
+				array(
+					'choice'   => 'search_hover_color',
+					'property' => 'color',
+					'element'  => array(
+						"{$class} .nav-search:hover",
+						"{$class} .nav-search:focus",
+					),
+				),
+			),
+			'active_callback' => $callback,
+		);
+	}
+
+	/**
+	 * Check if menu is active.
+	 *
+	 * @since   0.1.0
+	 *
+	 * @return  bool
+	 */
 	function has_menu( $menu_name ) {
 		return has_nav_menu( $menu_name );
 	}
 
+	/**
+	 * Check if a given menu has a submenu.
+	 *
+	 * @since   0.1.0
+	 *
+	 * @return  bool
+	 */
 	function has_submenu( $menu_name ) {
 
 		if ( ! $this->has_menu( $menu_name ) ) {
@@ -341,6 +429,13 @@ class Mai_Colors_Navigation {
 		return false;
 	}
 
+	/**
+	 * Check if a given menu has a highlight menu item.
+	 *
+	 * @since   0.1.0
+	 *
+	 * @return  bool
+	 */
 	function has_highlight( $menu_name ) {
 
 		if ( ! $this->has_menu( $menu_name ) ) {
@@ -363,6 +458,42 @@ class Mai_Colors_Navigation {
 		return false;
 	}
 
+	/**
+	 * Check if a given menu has a search icon menu item.
+	 *
+	 * @since   0.1.0
+	 *
+	 * @return  bool
+	 */
+	function has_search( $menu_name ) {
+
+		if ( ! $this->has_menu( $menu_name ) ) {
+			return false;
+		}
+
+		// Get menu items.
+		$menu_items = $this->get_menu_items( $menu_name );
+
+		// Loop thru em.
+		foreach ( $menu_items as $item ) {
+			// If we have a search.
+			if ( in_array( 'search', $item->classes ) ) {
+				return true;
+				continue;
+			}
+		}
+
+		// Nope.
+		return false;
+	}
+
+	/**
+	 * Get menu items, from cache or new query.
+	 *
+	 * @since   0.1.0
+	 *
+	 * @return  array  Menu items.
+	 */
 	function get_menu_items( $menu_name ) {
 
 		// Setup caches.
@@ -395,8 +526,20 @@ class Mai_Colors_Navigation {
 
 }
 
+/**
+ * Create a function to instantiate the class.
+ *
+ * @since   0.1.0
+ *
+ * @return  object  The class.
+ */
 function Mai_Colors_Navigation( $panel_id, $config_id ) {
 	return new Mai_Colors_Navigation( $panel_id, $config_id );
 }
 
+/**
+ * Let's go!
+ *
+ * @since 0.1.0
+ */
 Mai_Colors_Navigation( $panel_id, $config_id );
