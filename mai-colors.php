@@ -19,13 +19,13 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Main Mai_Colors Class.
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 final class Mai_Colors {
 
 	/**
 	 * @var Mai_Colors The one true Mai_Colors
-	 * @since 1.0.0
+	 * @since 0.1.0
 	 */
 	private static $instance;
 
@@ -35,7 +35,7 @@ final class Mai_Colors {
 	 * Insures that only one instance of Mai_Colors exists in memory at any one
 	 * time. Also prevents needing to define globals all over the place.
 	 *
-	 * @since   1.0.0
+	 * @since   0.1.0
 	 * @static  var array $instance
 	 * @uses    Mai_Colors::setup_constants() Setup the constants needed.
 	 * @uses    Mai_Colors::includes() Include the required files.
@@ -61,7 +61,7 @@ final class Mai_Colors {
 	 * The whole idea of the singleton design pattern is that there is a single
 	 * object therefore, we don't want the object to be cloned.
 	 *
-	 * @since   1.0.0
+	 * @since   0.1.0
 	 * @access  protected
 	 * @return  void
 	 */
@@ -73,7 +73,7 @@ final class Mai_Colors {
 	/**
 	 * Disable unserializing of the class.
 	 *
-	 * @since   1.0.0
+	 * @since   0.1.0
 	 * @access  protected
 	 * @return  void
 	 */
@@ -86,7 +86,7 @@ final class Mai_Colors {
 	 * Setup plugin constants.
 	 *
 	 * @access  private
-	 * @since   1.0.0
+	 * @since   0.1.0
 	 * @return  void
 	 */
 	private function setup_constants() {
@@ -127,7 +127,7 @@ final class Mai_Colors {
 	 * Include required files.
 	 *
 	 * @access  private
-	 * @since   1.0.0
+	 * @since   0.1.0
 	 * @return  void
 	 */
 	private function includes() {
@@ -269,7 +269,7 @@ final class Mai_Colors {
  *
  * Example: <?php $plugin = Mai_Colors(); ?>
  *
- * @since 1.0.0
+ * @since 0.1.0
  *
  * @return object|Mai_Colors The one true Mai_Colors Instance.
  */
