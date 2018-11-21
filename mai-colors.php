@@ -138,6 +138,7 @@ final class Mai_Colors {
 	public function setup() {
 		add_action( 'plugins_loaded', array( $this, 'updater' ) );
 		add_action( 'init',           array( $this, 'settings' ) );
+		add_action( 'login_head',     array( $this, 'login_styles' ) );
 	}
 
 	/**
@@ -199,6 +200,60 @@ final class Mai_Colors {
 		// Content.
 		include_once 'configs/content.php';
 
+	}
+
+	/**
+	 * Add custom login styles based on front end styles.
+	 * If using a logo and site header is dark, login page would look weird, this matches a little more consistenty.
+	 *
+	 * @return  void
+	 */
+	function login_styles() {
+
+		$logo_id = get_theme_mod( 'custom_logo' );
+
+		// Bail if we don't have a custom logo.
+		if ( ! $logo_id ) {
+			return;
+		}
+
+		$colors = get_option( 'mai_colors' );
+
+		// Bail if no colors.
+		if ( ! $colors ) {
+			return;
+		}
+
+		$header_bg    = isset( $colors['site_header']['bg'] ) ? sanitize_hex_color( $colors['site_header']['bg'] ) : false;
+		$header_color = isset( $colors['header_nav_color']['item_color'] ) ? sanitize_hex_color( $colors['header_nav_color']['item_color'] ) : false;
+
+		// Bail if no header background color.
+		if ( ! $header_bg ) {
+			return;
+		}
+
+		echo '<style>';
+			echo 'body {';
+				printf( 'background: %s;', sanitize_hex_color( $header_bg ) );
+				$header_color ? printf( 'color: %s;', $header_color ) : '';
+			echo '}';
+			if ( $header_color ) {
+				echo 'a,';
+				echo '.login #nav a,';
+				echo '.login #backtoblog a {';
+					printf( 'color: %s;', $header_color );
+				echo '}';
+				echo 'a:hover,';
+				echo 'a:focus,';
+				echo '.login #nav a:hover,';
+				echo '.login #nav a:focus,';
+				echo '.login #backtoblog a:hover,';
+				echo '.login #backtoblog a:focus {';
+					printf( 'color: %s;', $header_color );
+					echo 'text-decoration: underline dotted;';
+				echo '}';
+			}
+		echo '</style>';
 	}
 
 }
