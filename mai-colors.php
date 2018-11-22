@@ -3,7 +3,7 @@
 /**
  * Plugin Name:     Mai Colors
  * Plugin URI:      https://maitheme.com/
- * Description:     Customize fonts and typography in Mai Theme powered sites.
+ * Description:     Customize colors in Mai Theme powered websites.
  *
  * Version:         0.2.0
  *
