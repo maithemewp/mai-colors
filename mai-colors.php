@@ -200,6 +200,11 @@ final class Mai_Colors {
 		// Content.
 		include_once 'configs/content.php';
 
+		// WooCommerce.
+		if ( class_exists( 'WooCommerce' ) ) {
+			include_once 'configs/woocommerce.php';
+		}
+
 	}
 
 	/**
