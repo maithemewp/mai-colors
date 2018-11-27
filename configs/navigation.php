@@ -183,6 +183,8 @@ class Mai_Colors_Navigation {
 
 		// If header nav.
 		if ( 'header_nav_color' === $key ) {
+			$config['output'][1]['element'][] = '.mai-bars'; // Add mobile menu toggle.
+			// Remove items not applicable to header nav.
 			unset( $config['choices']['menu_bg'] );
 			unset( $config['choices']['item_hover_bg'] );
 			unset( $config['choices']['item_current_bg'] );

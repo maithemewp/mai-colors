@@ -5,7 +5,7 @@
  * Plugin URI:      https://maitheme.com/
  * Description:     Customize colors in Mai Theme powered websites.
  *
- * Version:         0.2.0
+ * Version:         0.2.1
  *
  * GitHub URI:      maithemewp/mai-colors
  *
@@ -93,7 +93,7 @@ final class Mai_Colors {
 
 		// Plugin version.
 		if ( ! defined( 'MAI_COLORS_VERSION' ) ) {
-			define( 'MAI_COLORS_VERSION', '0.2.0' );
+			define( 'MAI_COLORS_VERSION', '0.2.1' );
 		}
 
 		// Plugin Folder Path.
