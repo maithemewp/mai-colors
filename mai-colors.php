@@ -5,7 +5,7 @@
  * Plugin URI:      https://maitheme.com/
  * Description:     Customize colors in Mai Theme powered websites.
  *
- * Version:         0.2.1
+ * Version:         0.2.2
  *
  * GitHub URI:      maithemewp/mai-colors
  *
@@ -93,7 +93,7 @@ final class Mai_Colors {
 
 		// Plugin version.
 		if ( ! defined( 'MAI_COLORS_VERSION' ) ) {
-			define( 'MAI_COLORS_VERSION', '0.2.1' );
+			define( 'MAI_COLORS_VERSION', '0.2.2' );
 		}
 
 		// Plugin Folder Path.
@@ -132,7 +132,7 @@ final class Mai_Colors {
 	 */
 	private function includes() {
 		include_once MAI_COLORS_INCLUDES_DIR . 'vendor/class-kirki-installer-section.php';
-		foreach ( glob( MAI_COLORS_INCLUDES_DIR . '*.php' ) as $file ) { include $file; }
+		// foreach ( glob( MAI_COLORS_INCLUDES_DIR . '*.php' ) as $file ) { include $file; }
 	}
 
 	public function setup() {

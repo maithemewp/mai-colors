@@ -326,6 +326,7 @@ class Mai_Colors_Navigation {
 					'property' => 'background-color',
 					'element'  => array(
 						"{$class} .highlight > a",
+						"{$class} .highlight.current-menu-item > a",
 					),
 				),
 				array(
@@ -333,6 +334,7 @@ class Mai_Colors_Navigation {
 					'property' => 'color',
 					'element'  => array(
 						"{$class} .highlight > a",
+						"{$class} .highlight.current-menu-item > a",
 					),
 				),
 				array(
@@ -341,6 +343,8 @@ class Mai_Colors_Navigation {
 					'element'  => array(
 						"{$class} .highlight > a:hover",
 						"{$class} .highlight > a:focus",
+						"{$class} .highlight.current-menu-item > a:hover",
+						"{$class} .highlight.current-menu-item > a:focus",
 					),
 				),
 				array(
@@ -349,6 +353,8 @@ class Mai_Colors_Navigation {
 					'element'  => array(
 						"{$class} .highlight > a:hover",
 						"{$class} .highlight > a:focus",
+						"{$class} .highlight.current-menu-item > a:hover",
+						"{$class} .highlight.current-menu-item > a:focus",
 					),
 				),
 			),
